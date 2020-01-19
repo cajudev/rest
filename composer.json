@@ -1,0 +1,38 @@
+{
+  "name": "cajudev/restful-api",
+  "description": "Creating Restful APIs in the blink of an eye",
+  "keywords": [
+    "restful",
+    "api",
+    "rest",
+    "php"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/cajudev/restful-api",
+  "type": "library",
+  "authors": [
+    {
+      "name": "Richard Lopes",
+      "email": "contato.richardlopes@outlook.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Cajudev\\RestfulApi\\": [
+        "src/",
+        "tests/"
+      ]
+    }
+  },
+  "require": {
+    "php": "^7.1",
+    "slim/slim": "^4.3",
+    "slim/psr7": "^0.6",
+    "doctrine/orm": "^2.7",
+    "cajudev/collection": "^2.2"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^7",
+    "php-coveralls/php-coveralls": "^2"
+  }
+}
