@@ -2,13 +2,26 @@
 
 namespace Cajudev\RestfulApi;
 
+use Doctrine\Common\Collections\Collection;
+
 class EntityList
 {
-    private atrray $entities;
+    private $entities;
 
-    public function __construct(array $entities = [])
+    /**
+     * @param array|Collection $entities
+     */
+    public function __construct($entities = [])
     {
         $this->entities = $entities;
+    }
+
+    public function count(): int
+    {
+        if ($this->entities instanceof Collection) {
+            return $this->entities->count();
+        }
+        return count($this->entities);
     }
 
     /**
@@ -16,7 +29,7 @@ class EntityList
      *
      * @param string $method
      * @param array $args
-     * 
+     *
      * @return void
      */
     public function __call(string $method, array $args = [])
