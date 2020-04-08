@@ -22,7 +22,7 @@ abstract class Service
         return $response;
     }
 
-    public function getOne(Request $request, Response $response, array $args): Response
+    public function get(Request $request, Response $response, array $args): Response
     {
         $validator = $this->getValidator($args);
         $validator->validateRead();
@@ -31,7 +31,7 @@ abstract class Service
         return $this->toJson($response, $entity->toArray())->withStatus(200);
     }
 
-    public function getAll(Request $request, Response $response, array $args): Response
+    public function all(Request $request, Response $response, array $args): Response
     {
         $entities = $this->getRepository()->findAll();
         return $this->toJson($response, ['data' => $entities->toArray(), 'total' => $entities->count()])->withStatus(200);
@@ -39,7 +39,7 @@ abstract class Service
 
     public function search(Request $request, Response $response, array $args): Response
     {
-        $criteria = new CriteriaBuilder($args);
+        $criteria = new CriteriaBuilder($request->getQueryParams());
         $entities = $this->getRepository()->matching($criteria->build());
         return $this->toJson($response, ['data' => $entities->toArray(), 'total' => $entities->count()])->withStatus(200);
     }
@@ -64,12 +64,12 @@ abstract class Service
     {
         $params = $request->getParsedBody() ?? [];
 
-        $validator = $this->getValidator([...$params, ...$args]);
+        $validator = $this->getValidator($params + $args);
         $validator->validateUpdate();
 
         $params = $validator->getData();
         $entity = $this->getRepository()->find($params['id']);
-        $entity->setParams($params);
+        $entity->populate($params);
 
         $this->em->flush();
 
@@ -83,8 +83,8 @@ abstract class Service
 
         $params = $validator->getData();
         $entity = $this->getRepository()->find($args['id']);
+        $entity->excluded = true;
 
-        $this->em->remove($entity);
         $this->em->flush();
 
         return $response->withStatus(204);

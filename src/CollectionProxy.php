@@ -3,6 +3,7 @@
 namespace Cajudev\RestfulApi;
 
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
 final class CollectionProxy
 {
@@ -11,8 +12,9 @@ final class CollectionProxy
 
     public function __construct(Entity $owner, Collection $collection)
     {
+        $this->collection = new ArrayCollection();
         $this->owner = $owner;
-        $this->collection = $collection;
+        $this->set($collection);
     }
 
     /**
@@ -24,7 +26,10 @@ final class CollectionProxy
      */
     public function set(Collection $collection): void
     {
-        $this->collection = $collection;
+        $this->clear();
+        foreach ($collection as $entity) {
+            $this->add($entity);
+        }
     }
 
     /**

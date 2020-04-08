@@ -35,6 +35,11 @@ abstract class Entity
     {
         $ref = new \ReflectionProperty($this, strtolower($property));
         $ref->setAccessible(true);
+        
+        if ($value instanceof Collection) {
+            $proxy = new CollectionProxy($this, $value);
+        }
+
         $ref->setValue($this, $value);
     }
 }

@@ -276,7 +276,7 @@ abstract class Validator
 
     public function validateId()
     {
-        if (!$this->getRepository()->find($this->id)) {
+        if (!$this->getRepository()->findOneBy(['id' => $this->id, 'excluded' => false])) {
             throw new NotFoundException("Recurso não encontrado");
         }
     }

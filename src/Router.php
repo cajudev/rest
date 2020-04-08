@@ -46,11 +46,11 @@ class Router
     public function crud(string $endpoint, Service $service)
     {
         $this->app->get("/{$endpoint}/{id:[0-9]+}", function (Request $request, Response $response, array $args) use ($service) {
-            $response = $service->getOne($request, $response, $args);
+            $response = $service->get($request, $response, $args);
             return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
         });
         $this->app->get("/{$endpoint}", function (Request $request, Response $response, array $args) use ($service) {
-            $response = $service->getAll($request, $response, $args);
+            $response = $service->search($request, $response, $args);
             return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
         });
         $this->app->post("/{$endpoint}", function (Request $request, Response $response, array $args) use ($service) {
