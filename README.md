@@ -1,4 +1,4 @@
-# Bem vindo ao Restful API
+# Restful API
 
 [![](https://img.shields.io/packagist/v/cajudev/restful-api.svg)](https://packagist.org/packages/cajudev/restful-api)
 [![](https://img.shields.io/packagist/dt/cajudev/restful-api.svg)](https://packagist.org/packages/cajudev/restful-api)
@@ -16,7 +16,7 @@ Leia a documentação completa em: https://cajudev.readthedocs.io/projects/restf
 
 - Segue os padrões PSR-1, PSR-2 e PSR-4
 - Testes unitários com PHPUnit
-- Desenvolvido com Slim 4
+- Gerenciamento de requisições com Slim
 - Persistência de dados com Doctrine
 
 ## Instalação
