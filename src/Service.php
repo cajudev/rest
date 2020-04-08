@@ -2,8 +2,10 @@
 
 namespace Cajudev\RestfulApi;
 
-use Slim\Psr7\Request;
-use Slim\Psr7\Response;
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
+
+use Cajudev\RestfulApi\CriteriaBuilder;
 
 abstract class Service
 {
@@ -26,13 +28,20 @@ abstract class Service
         $validator->validateRead();
 
         $entity = $this->getRepository()->find($args['id']);
-        return $this->toJson($response, ['success' => true, 'data' => $entity->toArray()]);
+        return $this->toJson($response, $entity->toArray())->withStatus(200);
     }
 
     public function getAll(Request $request, Response $response, array $args): Response
     {
         $entities = $this->getRepository()->findAll();
-        return $this->toJson($response, ['success' => true, 'data' => $entities->toArray()]);
+        return $this->toJson($response, ['data' => $entities->toArray(), 'total' => $entities->count()])->withStatus(200);
+    }
+
+    public function search(Request $request, Response $response, array $args): Response
+    {
+        $criteria = new CriteriaBuilder($args);
+        $entities = $this->getRepository()->matching($criteria->build());
+        return $this->toJson($response, ['data' => $entities->toArray(), 'total' => $entities->count()])->withStatus(200);
     }
 
     public function insert(Request $request, Response $response, array $args): Response
@@ -47,15 +56,15 @@ abstract class Service
         $this->em->persist($entity);
         $this->em->flush();
 
-        return $this->toJson($response, ['success' => true, 'data' => $entity->toArray()]);
+        return $this->toJson($response, $entity->toArray())->withStatus(201);
+        ;
     }
 
     public function update(Request $request, Response $response, array $args): Response
     {
         $params = $request->getParsedBody() ?? [];
-        $params['id'] = $args['id'];
 
-        $validator = $this->getValidator($params);
+        $validator = $this->getValidator([...$params, ...$args]);
         $validator->validateUpdate();
 
         $params = $validator->getData();
@@ -64,25 +73,21 @@ abstract class Service
 
         $this->em->flush();
 
-        return $this->toJson($response, ['success' => true, 'data' => $entity->toArray()]);
+        return $this->toJson($response, $entity->toArray())->withStatus(200);
     }
 
     public function delete(Request $request, Response $response, array $args): Response
     {
-        $params['id'] = $args['id'];
-
-        $validator = $this->getValidator($params);
+        $validator = $this->getValidator($args);
         $validator->validateDelete();
 
         $params = $validator->getData();
-        $entity = $this->getRepository()->find($params['id']);
-
-        $return = $entity->toArray();
+        $entity = $this->getRepository()->find($args['id']);
 
         $this->em->remove($entity);
         $this->em->flush();
 
-        return $this->toJson($response, ['success' => true, 'data' => $return]);
+        return $response->withStatus(204);
     }
 
     public function getEntity(array $params = [])
