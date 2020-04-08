@@ -45,7 +45,7 @@ class Router
 
     public function crud(string $endpoint, Service $service)
     {
-        $this->app->get("/{$endpoint}/{id}", function (Request $request, Response $response, array $args) use ($service) {
+        $this->app->get("/{$endpoint}/{id:[0-9]+}", function (Request $request, Response $response, array $args) use ($service) {
             $response = $service->getOne($request, $response, $args);
             return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
         });
@@ -57,11 +57,11 @@ class Router
             $response = $service->insert($request, $response, $args);
             return $response->withHeader('Content-Type', 'application/json')->withStatus(201);
         });
-        $this->app->put("/{$endpoint}/{id}", function (Request $request, Response $response, array $args) use ($service) {
+        $this->app->put("/{$endpoint}/{id:[0-9]+}", function (Request $request, Response $response, array $args) use ($service) {
             $response = $service->update($request, $response, $args);
             return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
         });
-        $this->app->delete("/{$endpoint}/{id}", function (Request $request, Response $response, array $args) use ($service) {
+        $this->app->delete("/{$endpoint}/{id:[0-9]+}", function (Request $request, Response $response, array $args) use ($service) {
             $response = $service->delete($request, $response, $args);
             return $response->withHeader('Content-Type', 'application/json')->withStatus(204);
         });

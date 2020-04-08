@@ -276,12 +276,8 @@ abstract class Validator
 
     public function validateId()
     {
-        if (!is_numeric($this->id)) {
-            throw new BadRequestException('Parâmetro [id] inválido');
-        }
-
         if (!$this->getRepository()->find($this->id)) {
-            throw new NotFoundException("Cliente de id [{$this->id}] não encontrado");
+            throw new NotFoundException("Recurso não encontrado");
         }
     }
 
