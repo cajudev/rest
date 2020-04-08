@@ -17,7 +17,7 @@ class Config
         $this->info = $file->parse(new JsonParser());
     }
 
-    public static function getInstance()
+    public static function getInstance(): Config
     {
         if (self::$instance === null) {
             self::$instance = new self();

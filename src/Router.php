@@ -21,6 +21,9 @@ class Router
 
     private function __construct()
     {
+        if (!defined('__ROOT__')) {
+            throw new MissingConfigurationException('A environment constant called __ROOT__ must be defined');
+        }
         if (!defined('__DEV__')) {
             throw new MissingConfigurationException('A environment constant called __DEV__ must be defined');
         }

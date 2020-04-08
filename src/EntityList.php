@@ -4,7 +4,7 @@ namespace Cajudev\RestfulApi;
 
 class EntityList
 {
-    private $entities;
+    private atrray $entities;
 
     public function __construct(array $entities = [])
     {
@@ -12,7 +12,12 @@ class EntityList
     }
 
     /**
-     * Executa o método chamado em cada entidade da lista
+     * Delegate the called method to all entities
+     *
+     * @param string $method
+     * @param array $args
+     * 
+     * @return void
      */
     public function __call(string $method, array $args = [])
     {

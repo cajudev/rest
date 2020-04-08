@@ -16,7 +16,7 @@ class EntityManager
     {
         if (self::$instance === null) {
             $config = \Doctrine\ORM\Tools\Setup::createAnnotationMetadataConfiguration(
-                [PATH_ROOT . '/src/entity'],
+                [__ROOT__ . '/src/entity'],
                 $isDevMode = __DEV__,
                 $proxyDir = null,
                 $cache = null,
@@ -25,7 +25,7 @@ class EntityManager
             if (!($conn = Config::getInstance()->get('database'))) {
                 throw new MissingConfigurationException('Parâmetro [database] não encontrado no arquivo config.json');
             }
-            self::$instance = \Doctrine\ORM\EntityManager::create($conn->get(), $config);
+            self::$instance = \Doctrine\ORM\EntityManager::create($conn, $config);
         }
         return self::$instance;
     }

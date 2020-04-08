@@ -11,7 +11,7 @@ class File
 
     public function read(string $path)
     {
-        $filepath = PATH_ROOT . $path;
+        $filepath = __ROOT__ . $path;
         if (!($this->content = @file_get_contents($filepath))) {
             throw new MissingConfigurationException("Arquivo [$filepath] não encontrado");
         }
