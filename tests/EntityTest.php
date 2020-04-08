@@ -1,9 +1,10 @@
 <?php
 
-use Cajudev\RestfulApi\Entity;
-
 use PHPUnit\Framework\TestCase;
+
+use Cajudev\RestfulApi\Entity;
 use Cajudev\RestfulApi\CollectionProxy;
+
 use Doctrine\Common\Collections\ArrayCollection;
 
 class EntityTest extends TestCase
