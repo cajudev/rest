@@ -57,7 +57,7 @@ abstract class Entity
 
     public function __get($property)
     {
-        $ref = new \ReflectionProperty($this, strtolower($property));
+        $ref = $this->getReflection()->getProperty(strtolower($property));
         $ref->setAccessible(true);
         $value = $ref->getValue($this);
 
@@ -70,7 +70,7 @@ abstract class Entity
 
     public function __set($property, $value)
     {
-        $ref = new \ReflectionProperty($this, strtolower($property));
+        $ref = $this->getReflection()->getProperty(strtolower($property));
         $ref->setAccessible(true);
     
         if ($value instanceof Collection) {
@@ -78,5 +78,16 @@ abstract class Entity
         }
 
         $ref->setValue($this, $value);
+    }
+
+    private function getReflection(): \ReflectionClass
+    {
+        $reflection = new \ReflectionClass($this);
+
+        if ($this instanceof \Doctrine\Common\Persistence\Proxy) {
+            $reflection = $reflection->getParentClass();
+        }
+
+        return $reflection;
     }
 }
