@@ -90,13 +90,13 @@ abstract class Service
         return $response->withStatus(204);
     }
 
-    public function getEntity(array $params = [])
+    public function getEntity($params = [])
     {
         $class = str_replace('Services', 'Entity', static::class);
         return new $class($params);
     }
 
-    public function getValidator(array $params = [])
+    public function getValidator($params = [])
     {
         $class = str_replace('Services', 'Validator', static::class);
         return new $class($params);

@@ -16,15 +16,15 @@ abstract class Validator
     const DELETE = 3;
     const READ = 4;
 
-    public $id;
+    public int $id = 0;
     private $reflection;
 
     /**
      * __construct
      *
-     * @param array $properties - Valores a serem validados
+     * @param array|object $properties - Valores a serem validados
      */
-    public function __construct(array $properties)
+    public function __construct($properties)
     {
         $this->em           = EntityManager::getInstance();
         $this->reflection   = new \ReflectionClass($this);
