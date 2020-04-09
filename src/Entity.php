@@ -2,20 +2,57 @@
 
 namespace Cajudev\RestfulApi;
 
+use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 
+/**
+ * @ORM\MappedSuperclass
+ * @ORM\HasLifecycleCallbacks
+ */
 abstract class Entity
 {
-    public function __construct(array $properties = [])
+    /** @ORM\Id @ORM\Column(type="integer") @ORM\GeneratedValue **/
+    protected int $id = 0;
+
+    /** @ORM\Column(type="boolean", nullable=false) */
+    protected bool $active = true;
+
+    /** @ORM\Column(type="boolean", nullable=false) */
+    protected bool $excluded = false;
+
+    /** @ORM\Column(type="datetime", nullable=false) */
+    protected \DateTime $createdAt;
+
+    /** @ORM\Column(type="datetime", nullable=false) */
+    protected \DateTime $updatedAt;
+
+    public function __construct($properties = [])
     {
         $this->populate($properties);
     }
 
-    public function populate(array $properties = [])
+    public function populate($properties = [])
     {
         foreach ($properties as $property => $value) {
             $this->$property = $value;
         }
+    }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function prePersist(): void
+    {
+        $this->createdAt = new \DateTime();
+        $this->updatedAt = new \DateTime();
+    }
+
+    /**
+     * @ORM\PreUpdate
+     */
+    public function preUpdate(): void
+    {
+        $this->updatedAt = new \DateTime();
     }
 
     public function __get($property)
@@ -35,7 +72,7 @@ abstract class Entity
     {
         $ref = new \ReflectionProperty($this, strtolower($property));
         $ref->setAccessible(true);
-        
+    
         if ($value instanceof Collection) {
             $proxy = new CollectionProxy($this, $value);
         }
