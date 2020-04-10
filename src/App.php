@@ -2,7 +2,6 @@
 
 namespace Cajudev\Rest;
 
-use Slim\App;
 use Slim\Factory\AppFactory;
 use Slim\Middleware\ErrorMiddleware;
 
@@ -14,7 +13,7 @@ use Cajudev\Rest\Service;
 use Cajudev\Rest\Middleware\JsonMiddleware;
 use Cajudev\Rest\Exception\MissingConfigurationException;
 
-class Router
+class App
 {
     private $app;
     private $errorMiddleware;
@@ -33,9 +32,9 @@ class Router
         $this->setErrorHandler();
     }
 
-    public static function create(): Router
+    public static function create(): App
     {
-        return new Router();
+        return new App();
     }
 
     public function addMiddleware(Middleware $middleware): void
@@ -74,12 +73,12 @@ class Router
 
     private function setErrorHandler(): void
     {
-        $router = $this->app;
+        $app = $this->app;
         
         $this->errorMiddleware = $this->app->addErrorMiddleware(__DEV__, true, true);
 
-        $this->errorMiddleware->setDefaultErrorHandler(function ($request, $e) use ($router) {
-            $response = $router->getResponseFactory()->createResponse();
+        $this->errorMiddleware->setDefaultErrorHandler(function ($request, $e) use ($app) {
+            $response = $app->getResponseFactory()->createResponse();
             $data = ['error' => $e->getMessage()];
             $response->getBody()->write(json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
             return $response->withHeader('Content-Type', 'application/json')->withStatus($e->getCode());
