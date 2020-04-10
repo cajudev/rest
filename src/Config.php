@@ -1,9 +1,9 @@
 <?php
 
-namespace Cajudev\RestfulApi;
+namespace Cajudev\Rest;
 
-use Cajudev\RestfulApi\Util\File;
-use Cajudev\RestfulApi\Util\Parser\JsonParser;
+use Cajudev\Rest\Util\File;
+use Cajudev\Rest\Util\Parser\JsonParser;
 
 class Config
 {

@@ -2,7 +2,7 @@
 
 use PHPUnit\Framework\TestCase;
 
-use Cajudev\RestfulApi\CriteriaBuilder;
+use Cajudev\Rest\CriteriaBuilder;
 use Doctrine\Common\Collections\Criteria;
 
 class CriteriaBuilderTest extends TestCase

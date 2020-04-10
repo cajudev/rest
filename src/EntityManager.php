@@ -1,8 +1,8 @@
 <?php
 
-namespace Cajudev\RestfulApi;
+namespace Cajudev\Rest;
 
-use Cajudev\RestfulApi\Exception\MissingConfigurationException;
+use Cajudev\Rest\Exception\MissingConfigurationException;
 
 class EntityManager
 {

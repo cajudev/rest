@@ -1,13 +1,13 @@
 <?php
 
-namespace Cajudev\RestfulApi;
+namespace Cajudev\Rest;
 
-use Cajudev\RestfulApi\Annotation\Validation;
+use Cajudev\Rest\Annotation\Validation;
 
 use Doctrine\Common\Annotations\AnnotationReader;
-use Cajudev\RestfulApi\Exception\NotFoundException;
-use Cajudev\RestfulApi\Exception\BadRequestException;
-use Cajudev\RestfulApi\Exception\UnprocessableEntityException;
+use Cajudev\Rest\Exception\NotFoundException;
+use Cajudev\Rest\Exception\BadRequestException;
+use Cajudev\Rest\Exception\UnprocessableEntityException;
 
 abstract class Validator
 {
@@ -48,7 +48,7 @@ abstract class Validator
         try {
             $property = $this->reflection->getProperty($property);
 
-            if (!$property->isPublic() || $property->getValue($this) !== null) {
+            if (!$property->isPublic()) {
                 return null;
             }
 

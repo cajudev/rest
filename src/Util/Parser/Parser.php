@@ -1,5 +1,5 @@
 <?php
-namespace Cajudev\RestfulApi\Util\Parser;
+namespace Cajudev\Rest\Util\Parser;
 
 interface Parser
 {

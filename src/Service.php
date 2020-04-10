@@ -1,11 +1,11 @@
 <?php
 
-namespace Cajudev\RestfulApi;
+namespace Cajudev\Rest;
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
-use Cajudev\RestfulApi\CriteriaBuilder;
+use Cajudev\Rest\CriteriaBuilder;
 
 abstract class Service
 {
@@ -16,32 +16,26 @@ abstract class Service
         $this->em = EntityManager::getInstance();
     }
 
-    public function toJson(Response $response, array $content): Response
-    {
-        $response->getBody()->write(json_encode($content, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
-        return $response;
-    }
-
     public function get(Request $request, Response $response, array $args): Response
     {
         $validator = $this->getValidator($args);
         $validator->validateRead();
 
         $entity = $this->getRepository()->find($args['id']);
-        return $this->toJson($response, $entity->toArray())->withStatus(200);
+        return $this->toJson($response, $entity->payload())->withStatus(200);
     }
 
     public function all(Request $request, Response $response, array $args): Response
     {
         $entities = $this->getRepository()->findAll();
-        return $this->toJson($response, ['data' => $entities->toArray(), 'total' => $entities->count()])->withStatus(200);
+        return $this->toJson($response, ['data' => $entities->payload(), 'total' => $entities->count()])->withStatus(200);
     }
 
     public function search(Request $request, Response $response, array $args): Response
     {
         $criteria = new CriteriaBuilder($request->getQueryParams());
         $entities = $this->getRepository()->matching($criteria->build());
-        return $this->toJson($response, ['data' => $entities->toArray(), 'total' => $entities->count()])->withStatus(200);
+        return $this->toJson($response, ['data' => $entities->payload(), 'total' => $entities->count()])->withStatus(200);
     }
 
     public function insert(Request $request, Response $response, array $args): Response
@@ -56,7 +50,7 @@ abstract class Service
         $this->em->persist($entity);
         $this->em->flush();
 
-        return $this->toJson($response, $entity->toArray())->withStatus(201);
+        return $this->toJson($response, $entity->payload())->withStatus(201);
         ;
     }
 
@@ -73,7 +67,7 @@ abstract class Service
 
         $this->em->flush();
 
-        return $this->toJson($response, $entity->toArray())->withStatus(200);
+        return $this->toJson($response, $entity->payload())->withStatus(200);
     }
 
     public function delete(Request $request, Response $response, array $args): Response
@@ -88,6 +82,12 @@ abstract class Service
         $this->em->flush();
 
         return $response->withStatus(204);
+    }
+
+    public function toJson(Response $response, object $content): Response
+    {
+        $response->getBody()->write(json_encode($content, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
+        return $response;
     }
 
     public function getEntity($params = [])

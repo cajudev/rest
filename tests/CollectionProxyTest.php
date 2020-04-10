@@ -2,8 +2,8 @@
 
 use PHPUnit\Framework\TestCase;
 
-use Cajudev\RestfulApi\Entity;
-use Cajudev\RestfulApi\CollectionProxy;
+use Cajudev\Rest\Entity;
+use Cajudev\Rest\CollectionProxy;
 
 use Doctrine\Common\Collections\ArrayCollection;
 

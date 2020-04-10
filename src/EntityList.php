@@ -1,6 +1,6 @@
 <?php
 
-namespace Cajudev\RestfulApi;
+namespace Cajudev\Rest;
 
 use Doctrine\Common\Collections\Collection;
 

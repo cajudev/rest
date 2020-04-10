@@ -1,9 +1,9 @@
 <?php
 
-namespace Cajudev\RestfulApi\Util;
+namespace Cajudev\Rest\Util;
 
-use Cajudev\RestfulApi\Util\Parser\Parser;
-use Cajudev\RestfulApi\Exception\MissingConfigurationException;
+use Cajudev\Rest\Util\Parser\Parser;
+use Cajudev\Rest\Exception\MissingConfigurationException;
 
 class File
 {

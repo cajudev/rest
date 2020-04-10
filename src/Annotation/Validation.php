@@ -1,6 +1,6 @@
 <?php
 
-namespace Cajudev\RestfulApi\Annotation;
+namespace Cajudev\Rest\Annotation;
 
 /** @Annotation */
 final class Validation

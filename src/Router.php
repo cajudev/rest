@@ -1,6 +1,6 @@
 <?php
 
-namespace Cajudev\RestfulApi;
+namespace Cajudev\Rest;
 
 use Slim\App;
 use Slim\Factory\AppFactory;
@@ -10,9 +10,9 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\MiddlewareInterface as Middleware;
 
-use Cajudev\RestfulApi\Service;
-use Cajudev\RestfulApi\Middleware\JsonMiddleware;
-use Cajudev\RestfulApi\Exception\MissingConfigurationException;
+use Cajudev\Rest\Service;
+use Cajudev\Rest\Middleware\JsonMiddleware;
+use Cajudev\Rest\Exception\MissingConfigurationException;
 
 class Router
 {

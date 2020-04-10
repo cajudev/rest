@@ -2,8 +2,8 @@
 
 use PHPUnit\Framework\TestCase;
 
-use Cajudev\RestfulApi\Router;
-use Cajudev\RestfulApi\Exception\MissingConfigurationException;
+use Cajudev\Rest\Router;
+use Cajudev\Rest\Exception\MissingConfigurationException;
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;

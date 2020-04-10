@@ -1,6 +1,6 @@
 <?php
 
-namespace Cajudev\RestfulApi\Exception;
+namespace Cajudev\Rest\Exception;
 
 class MissingConfigurationException extends \Exception
 {
