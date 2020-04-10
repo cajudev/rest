@@ -2,12 +2,12 @@
 
 namespace Cajudev\Rest;
 
-use Cajudev\Rest\Annotations\Validation;
-
 use Doctrine\Common\Annotations\AnnotationReader;
+
 use Cajudev\Rest\Exceptions\NotFoundException;
 use Cajudev\Rest\Exceptions\BadRequestException;
 use Cajudev\Rest\Exceptions\UnprocessableEntityException;
+use Cajudev\Rest\Annotations\Validations\AnnotationValidator;
 
 abstract class Validator
 {
@@ -284,7 +284,7 @@ abstract class Validator
      */
     private function validatePropertyWithAnnotation(\ReflectionProperty $property)
     {
-        $annotation = $this->annotation->getPropertyAnnotation($property, Validation::class);
+        $annotation = $this->annotation->getPropertyAnnotation($property, AnnotationValidator::class);
         if ($annotation) {
             $newValue = $annotation->validate($property->getName(), $property->getValue($this));
             $property->setValue($this, $newValue);

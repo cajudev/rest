@@ -3,7 +3,6 @@
 namespace Cajudev\Rest\Factories;
 
 use Cajudev\Rest\EntityManager;
-use Cajudev\Rest\Interfaces\ClassFactory;
 
 class RepositoryFactory implements ClassFactory
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Cajudev\Rest\Interfaces;
+namespace Cajudev\Rest\Factories;
 
 interface ClassFactory
 {
