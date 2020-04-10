@@ -2,8 +2,8 @@
 
 namespace Cajudev\Rest;
 
-use Cajudev\Rest\Util\File;
-use Cajudev\Rest\Util\Parser\JsonParser;
+use Cajudev\Rest\Utils\File;
+use Cajudev\Rest\Utils\Parser\JsonParser;
 
 class Config
 {

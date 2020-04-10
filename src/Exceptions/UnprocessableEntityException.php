@@ -1,6 +1,6 @@
 <?php
 
-namespace Cajudev\Rest\Exception;
+namespace Cajudev\Rest\Exceptions;
 
 class UnprocessableEntityException extends HttpException
 {

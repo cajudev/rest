@@ -1,6 +1,6 @@
 <?php
 
-namespace Cajudev\Rest\Util\Parser;
+namespace Cajudev\Rest\Utils\Parser;
 
 use Doctrine\Common\Collections\ArrayCollection;
 

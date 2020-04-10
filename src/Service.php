@@ -2,39 +2,44 @@
 
 namespace Cajudev\Rest;
 
+use Cajudev\Rest\CriteriaBuilder;
+use Cajudev\Rest\Factories\EntityFactory;
+
+use Cajudev\Rest\Factories\ValidatorFactory;
+use Cajudev\Rest\Factories\RepositoryFactory;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
-
-use Cajudev\Rest\CriteriaBuilder;
 
 abstract class Service
 {
     protected $em;
+    protected $name;
 
     public function __construct()
     {
         $this->em = EntityManager::getInstance();
+        $this->name = (new \ReflectionClass($this))->getShortName();
     }
 
     public function get(Request $request, Response $response, array $args): Response
     {
-        $validator = $this->getValidator($args);
-        $validator->validateRead();
+        $validator = ValidatorFactory::make($this->name, $args);
+        $validator->validate(Validator::READ);
 
-        $entity = $this->getRepository()->find($args['id']);
+        $entity = RepositoryFactory::make($this->name)->find($args['id']);
         return $this->toJson($response, $entity->payload())->withStatus(200);
     }
 
     public function all(Request $request, Response $response, array $args): Response
     {
-        $entities = $this->getRepository()->findAll();
+        $entities = RepositoryFactory::make($this->name)->findAll();
         return $this->toJson($response, ['data' => $entities->payload(), 'total' => $entities->count()])->withStatus(200);
     }
 
     public function search(Request $request, Response $response, array $args): Response
     {
         $criteria = new CriteriaBuilder($request->getQueryParams());
-        $entities = $this->getRepository()->matching($criteria->build());
+        $entities = RepositoryFactory::make($this->name)->matching($criteria->build());
         return $this->toJson($response, ['data' => $entities->payload(), 'total' => $entities->count()])->withStatus(200);
     }
 
@@ -42,10 +47,10 @@ abstract class Service
     {
         $params = $request->getParsedBody() ?? [];
 
-        $validator = $this->getValidator($params);
-        $validator->validateInsert();
+        $validator = ValidatorFactory::make($this->name, $params);
+        $validator->validate(Validator::INSERT);
 
-        $entity = $this->getEntity($validator->getData());
+        $entity = EntityFactory::make($this->name, $validator->payload());
 
         $this->em->persist($entity);
         $this->em->flush();
@@ -57,12 +62,13 @@ abstract class Service
     public function update(Request $request, Response $response, array $args): Response
     {
         $params = $request->getParsedBody() ?? [];
+        $params->id = $args['id'];
 
-        $validator = $this->getValidator($params + $args);
-        $validator->validateUpdate();
+        $validator = ValidatorFactory::make($this->name, $params);
+        $validator->validate(Validator::UPDATE);
 
-        $params = $validator->getData();
-        $entity = $this->getRepository()->find($params['id']);
+        $params = $validator->payload();
+        $entity = RepositoryFactory::make($this->name)->find($params->id);
         $entity->populate($params);
 
         $this->em->flush();
@@ -72,11 +78,11 @@ abstract class Service
 
     public function delete(Request $request, Response $response, array $args): Response
     {
-        $validator = $this->getValidator($args);
-        $validator->validateDelete();
+        $validator = ValidatorFactory::make($this->name, $args);
+        $validator->validate(Validator::DELETE);
 
-        $params = $validator->getData();
-        $entity = $this->getRepository()->find($args['id']);
+        $params = $validator->payload();
+        $entity = RepositoryFactory::make($this->name)->find($args['id']);
         $entity->excluded = true;
 
         $this->em->flush();
@@ -84,27 +90,9 @@ abstract class Service
         return $response->withStatus(204);
     }
 
-    public function toJson(Response $response, object $content): Response
+    public function toJson(Response $response, $content): Response
     {
         $response->getBody()->write(json_encode($content, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
         return $response;
-    }
-
-    public function getEntity($params = [])
-    {
-        $class = str_replace('Services', 'Entity', static::class);
-        return new $class($params);
-    }
-
-    public function getValidator($params = [])
-    {
-        $class = str_replace('Services', 'Validator', static::class);
-        return new $class($params);
-    }
-
-    public function getRepository()
-    {
-        $class = str_replace('Services', 'Entity', static::class);
-        return $this->em->getRepository($class);
     }
 }

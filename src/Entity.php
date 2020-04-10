@@ -6,7 +6,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Annotations\AnnotationReader;
 
-use \Cajudev\Rest\Annotation\Payload;
+use Cajudev\Rest\Annotations\Payload;
+use Cajudev\Rest\Collections\CollectionProxy;
 
 /**
  * @ORM\MappedSuperclass
@@ -19,7 +20,7 @@ abstract class Entity
      * 
      * @ORM\Id @ORM\Column(type="integer") @ORM\GeneratedValue
      */
-    protected int $id = 0;
+    protected ?int $id = 0;
 
     /**
      * @Payload
@@ -139,7 +140,7 @@ abstract class Entity
         $value = $ref->getValue($this);
 
         if ($value instanceof Collection) {
-            return new CollectionProxy($this, $value);
+            return new CollectionProxy($this, strtolower($property), $value);
         }
 
         return $value;
@@ -151,10 +152,11 @@ abstract class Entity
         $ref->setAccessible(true);
     
         if ($value instanceof Collection) {
-            $proxy = new CollectionProxy($this, $value);
+            $proxy = new CollectionProxy($this, $ref->getValue($this));
+            $proxy->set($value);
+        } else {
+            $ref->setValue($this, $value);
         }
-
-        $ref->setValue($this, $value);
     }
 
     private function getReflection(): \ReflectionClass

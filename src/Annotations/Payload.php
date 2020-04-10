@@ -1,6 +1,6 @@
 <?php
 
-namespace Cajudev\Rest\Annotation;
+namespace Cajudev\Rest\Annotations;
 
 /**
  * @Annotation

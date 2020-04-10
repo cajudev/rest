@@ -1,6 +1,6 @@
 <?php
 
-namespace Cajudev\Rest\Middleware;
+namespace Cajudev\Rest\Middlewares;
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;

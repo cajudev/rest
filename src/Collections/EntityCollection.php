@@ -1,10 +1,10 @@
 <?php
 
-namespace Cajudev\Rest;
+namespace Cajudev\Rest\Collections;
 
 use Doctrine\Common\Collections\Collection;
 
-class EntityList
+class EntityCollection
 {
     private $entities;
 

@@ -3,7 +3,7 @@
 use PHPUnit\Framework\TestCase;
 
 use Cajudev\Rest\App;
-use Cajudev\Rest\Exception\MissingConfigurationException;
+use Cajudev\Rest\Exceptions\MissingConfigurationException;
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;

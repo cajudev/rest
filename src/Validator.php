@@ -2,12 +2,12 @@
 
 namespace Cajudev\Rest;
 
-use Cajudev\Rest\Annotation\Validation;
+use Cajudev\Rest\Annotations\Validation;
 
 use Doctrine\Common\Annotations\AnnotationReader;
-use Cajudev\Rest\Exception\NotFoundException;
-use Cajudev\Rest\Exception\BadRequestException;
-use Cajudev\Rest\Exception\UnprocessableEntityException;
+use Cajudev\Rest\Exceptions\NotFoundException;
+use Cajudev\Rest\Exceptions\BadRequestException;
+use Cajudev\Rest\Exceptions\UnprocessableEntityException;
 
 abstract class Validator
 {
@@ -131,13 +131,30 @@ abstract class Validator
     }
 
     /**
+     * validate
+     *
+     * Realiza a validação de parâmetros em casos de inserção de dados
+     *
+     * @return void
+     */
+    public function validate(int $action)
+    {
+        switch ($action) {
+            case self::READ: $this->validateRead(); break;
+            case self::INSERT: $this->validateInsert(); break;
+            case self::UPDATE: $this->validateUpdate(); break;
+            case self::DELETE: $this->validateDelete(); break;
+        }
+    }
+
+    /**
      * validateInsert
      *
      * Realiza a validação de parâmetros em casos de inserção de dados
      *
      * @return void
      */
-    public function validateInsert()
+    protected function validateInsert()
     {
         foreach ($this->getProperties(['id']) as $property) {
             $annotation = $this->annotations[$property->getName()] ?? null;
@@ -155,7 +172,7 @@ abstract class Validator
      *
      * @return void
      */
-    public function validateUpdate()
+    protected function validateUpdate()
     {
         foreach ($this->getProperties() as $property) {
             $annotation = $this->annotations[$property->getName()] ?? null;
@@ -172,7 +189,7 @@ abstract class Validator
      *
      * @return void
      */
-    public function validateDelete()
+    protected function validateDelete()
     {
         $this->validateId();
     }
@@ -184,7 +201,7 @@ abstract class Validator
      *
      * @return void
      */
-    public function validateRead()
+    protected function validateRead()
     {
         $this->validateId();
     }
@@ -282,23 +299,23 @@ abstract class Validator
     }
 
     /**
-     * getData
+     * payload
      *
      * Retorna os atributos da classe em formato de array
      *
-     * Caso possua uma anotação @Database(column="name") o mapeamento será realizado
-     *
      * @return array
      */
-    public function getData(): array
+    public function payload(): object
     {
-        $data = [];
+        $payload = new \StdClass();
         foreach ($this->getProperties() as $property) {
-            $annotation = $this->annotation->getPropertyAnnotation($property, Validation::class);
-            $name = $annotation->rename ?? $property->getName();
-            $data[$name] = $property->getValue($this);
+            if ($property->getValue($this) !== null) {
+                $annotation = $this->annotation->getPropertyAnnotation($property, Validation::class);
+                $name = $annotation->rename ?? $property->getName();
+                $payload->$name = $property->getValue($this);
+            }
         }
-        return $data;
+        return $payload;
     }
 
     public function getEntity(string $name, array $params = [])

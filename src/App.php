@@ -10,8 +10,8 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\MiddlewareInterface as Middleware;
 
 use Cajudev\Rest\Service;
-use Cajudev\Rest\Middleware\JsonMiddleware;
-use Cajudev\Rest\Exception\MissingConfigurationException;
+use Cajudev\Rest\Middlewares\JsonMiddleware;
+use Cajudev\Rest\Exceptions\MissingConfigurationException;
 
 class App
 {

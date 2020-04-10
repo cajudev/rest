@@ -2,7 +2,7 @@
 
 namespace Cajudev\Rest;
 
-use Cajudev\Rest\Exception\MissingConfigurationException;
+use Cajudev\Rest\Exceptions\MissingConfigurationException;
 
 class EntityManager
 {
@@ -12,7 +12,7 @@ class EntityManager
     {
     }
 
-    public static function getInstance()
+    public static function getInstance(): \Doctrine\ORM\EntityManager
     {
         if (self::$instance === null) {
             if (!($conn = Config::getInstance()->get('database'))) {
