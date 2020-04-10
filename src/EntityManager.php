@@ -27,7 +27,7 @@ class EntityManager
                 $useSimpleAnnotationReader = false
             );
 
-            $namingStrategy = new \Doctrine\ORM\Mapping\UnderscoreNamingStrategy(CASE_LOWER);
+            $namingStrategy = new \Doctrine\ORM\Mapping\UnderscoreNamingStrategy(CASE_LOWER, true);
             $config->setNamingStrategy($namingStrategy);
 
             self::$instance = \Doctrine\ORM\EntityManager::create($conn, $config);
