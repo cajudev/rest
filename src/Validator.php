@@ -153,9 +153,7 @@ abstract class Validator
         foreach ($this->getProperties(['id']) as $property) {
             $annotation = $this->annotations[$property->getName()] ?? null;
             $required = $annotation ? $annotation->required : null;
-            $required === null || $required === true
-            ? $this->validateRequired($property)
-            : $this->validateOptional($property);
+            $required ? $this->validateRequired($property) : $this->validateOptional($property);
         }
     }
 
@@ -169,10 +167,7 @@ abstract class Validator
     protected function validateUpdate()
     {
         foreach ($this->getProperties() as $property) {
-            $annotation = $this->annotations[$property->getName()] ?? null;
-            $property->getName() === 'id' || $annotation && $annotation->required
-            ? $this->validateRequired($property)
-            : $this->validateOptional($property);
+            $property->getName() === 'id' ? $this->validateRequired($property) : $this->validateOptional($property);
         }
     }
 
