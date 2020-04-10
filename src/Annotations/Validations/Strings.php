@@ -9,7 +9,7 @@ use Cajudev\Rest\Exceptions\BadRequestException;
 /**
  * @Annotation
  */
-final class Strings implements AnnotationValidator
+final class Strings extends AbstractAnnotationValidator
 {
     /**
      * @var int

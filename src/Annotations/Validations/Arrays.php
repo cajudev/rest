@@ -9,7 +9,7 @@ use Cajudev\Rest\Exceptions\BadRequestException;
 /**
  * @Annotation
  */
-final class Arrays implements AnnotationValidator
+final class Arrays extends AbstractAnnotationValidator
 {
     /**
      * @var array
@@ -24,7 +24,7 @@ final class Arrays implements AnnotationValidator
     /**
      * @var int
      */
-    public $minlength;
+    public $minlength = 1;
 
     /**
      * @var int
@@ -37,21 +37,29 @@ final class Arrays implements AnnotationValidator
         }
 
         if ($this->length !== null && count($array) !== $this->length) {
-            throw new BadRequestException("Parâmetro [$property] deve possuir exatamente {$this->length} itens.");
+            throw new BadRequestException(
+                sprintf("Parâmetro [%s] deve possuir exatamente %d %s.", $property, $this->length, $this->length > 1 ? 'itens' : 'item')
+            );
         }
 
         if ($this->minlength !== null && count($array) < $this->minlength) {
-            throw new BadRequestException("Parâmetro [$property] deve possuir no mínimo {$this->minlength} itens.");
+            throw new BadRequestException(
+                sprintf("Parâmetro [%s] deve possuir no mínimo %d %s.", $property, $this->minlength, $this->minlength > 1 ? 'itens' : 'item')
+            );
         }
 
         if ($this->maxlength !== null && count($array) > $this->maxlength) {
-            throw new BadRequestException("Parâmetro [$property] deve possuir no máximo {$this->maxlength} itens.");
+            throw new BadRequestException(
+                sprintf("Parâmetro [%s] deve possuir no máximo %d %s.", $property, $this->maxlength, $this->maxlength > 1 ? 'itens' : 'item')
+            );
         }
 
         foreach ($array as $key => $value) {
             if (!in_array(gettype($value), $this->types)) {
                 $types = preg_replace('/(.+), /', '\1 e ', implode(', ', $this->types));
-                throw new BadRequestException(sprintf("Item [%s] do parâmetro [%s] inválido. Tipos permitidos são: %s", ++$key, $property, $types));
+                throw new BadRequestException(
+                    sprintf("Item [%s] do parâmetro [%s] inválido. Tipos permitidos são: %s", ++$key, $property, $types)
+                );
             }   
         }
 

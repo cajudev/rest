@@ -9,7 +9,7 @@ use Cajudev\Rest\Exceptions\BadRequestException;
 /**
  * @Annotation
  */
-final class Enum implements AnnotationValidator
+final class Enum extends AbstractAnnotationValidator
 {
     /**
      * @var array

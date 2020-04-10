@@ -52,12 +52,6 @@ abstract class Validator
                 return null;
             }
 
-            // Se possui um método set, faz a chamada ao método
-            $method = 'set' . ucfirst($property->getName());
-            if ($this->reflection->hasMethod($method)) {
-                return $this->$method($value);
-            }
-
             $property->setValue($this, $value);
         } catch (\ReflectionException $e) {
             return null;
@@ -89,7 +83,7 @@ abstract class Validator
     {
         $reader = new AnnotationReader();
         foreach ($this->getProperties() as $property) {
-            $ret[$property->getName()] = $reader->getPropertyAnnotation($property, Validation::class);
+            $ret[$property->getName()] = $reader->getPropertyAnnotation($property, AnnotationValidator::class);
         }
         return $ret;
     }
@@ -310,7 +304,7 @@ abstract class Validator
         $payload = new \StdClass();
         foreach ($this->getProperties() as $property) {
             if ($property->getValue($this) !== null) {
-                $annotation = $this->annotation->getPropertyAnnotation($property, Validation::class);
+                $annotation = $this->annotations[$property->getName()] ?? null;
                 $name = $annotation->rename ?? $property->getName();
                 $payload->$name = $property->getValue($this);
             }

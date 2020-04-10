@@ -9,7 +9,7 @@ use Cajudev\Rest\Exceptions\BadRequestException;
 /**
  * @Annotation
  */
-final class Mixed implements AnnotationValidator
+final class Mixed extends AbstractAnnotationValidator
 {
     /**
      * @var array
