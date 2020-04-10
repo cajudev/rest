@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Annotations\AnnotationReader;
 
+use Cajudev\Rest\Annotations\Query;
 use Cajudev\Rest\Annotations\Payload;
 use Cajudev\Rest\Collections\CollectionProxy;
 
@@ -18,6 +19,8 @@ abstract class Entity
 {
     /**
      * @Payload
+     * 
+     * @Query(sortable=true)
      * 
      * @ORM\Id @ORM\Column(type="integer") @ORM\GeneratedValue
      */

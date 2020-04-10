@@ -29,30 +29,33 @@ class CriteriaBuilder
 
     public function build()
     {
-        $criteria = Criteria::create();
+        $counter = Criteria::create();
 
-        $criteria->where(Criteria::expr()->eq('excluded', false));
+        $counter->where(Criteria::expr()->eq('excluded', false));
         
         if ($this->search) {
             $contains = [];
             foreach ($this->searchables as $searchable) {
                 $contains[] = Criteria::expr()->contains($searchable, $this->search);
             }
-            $criteria->andWhere(Criteria::expr()->orX(...$contains));
+            $counter->andWhere(Criteria::expr()->orX(...$contains));
         }
         
         if (is_bool($this->active)) {
-            $criteria->andWhere(Criteria::expr()->eq('active', $this->active));
+            $counter->andWhere(Criteria::expr()->eq('active', $this->active));
         }
 
         if (in_array($this->sort, $this->sortables)) {
-            $criteria->orderBy([$this->sort => $this->order]);
+            $counter->orderBy([$this->sort => $this->order]);
         }
+        
+        
+        $criteria = clone $counter;
         
         $offset = ($this->page - 1) * $this->limit;
         $criteria->setFirstResult($offset);
         $criteria->setMaxResults($this->limit);
 
-        return $criteria;
+        return [$counter, $criteria];
     }
 }

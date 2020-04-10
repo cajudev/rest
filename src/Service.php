@@ -47,9 +47,14 @@ abstract class Service
         $query['sortables'] = array_keys(array_filter($properties, fn($property) => $property->sortable));
         $query['searchables'] = array_keys(array_filter($properties, fn($property) => $property->searchable));
 
-        $criteria = new CriteriaBuilder($query);
-        $entities = RepositoryFactory::make($this->name)->matching($criteria->build());
-        return $this->toJson($response, ['data' => $entities->payload(), 'total' => $entities->count()])->withStatus(200);
+        $builder = new CriteriaBuilder($query);
+        [$counter, $criteria] = $builder->build();
+
+        $repository = RepositoryFactory::make($this->name);
+        $counter = $repository->matching($counter);
+        $entities = $repository->matching($criteria);
+        
+        return $this->toJson($response, ['data' => $entities->payload(), 'total' => $counter->count()])->withStatus(200);
     }
 
     public function insert(Request $request, Response $response, array $args): Response
