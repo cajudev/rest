@@ -4,6 +4,7 @@ namespace Cajudev\Rest;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Annotations\AnnotationReader;
 
 use Cajudev\Rest\Annotations\Payload;
@@ -152,6 +153,7 @@ abstract class Entity
         $ref->setAccessible(true);
     
         if ($value instanceof Collection) {
+            $ref->setValue($this, $ref->isInitialized($this) ? $ref->getValue($this) : new ArrayCollection());
             $proxy = new CollectionProxy($this, $ref->getValue($this));
             $proxy->set($value);
         } else {
