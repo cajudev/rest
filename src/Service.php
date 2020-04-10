@@ -3,10 +3,12 @@
 namespace Cajudev\Rest;
 
 use Cajudev\Rest\CriteriaBuilder;
+use Cajudev\Rest\Annotations\Query;
 use Cajudev\Rest\Factories\EntityFactory;
-
 use Cajudev\Rest\Factories\ValidatorFactory;
 use Cajudev\Rest\Factories\RepositoryFactory;
+use Cajudev\Rest\Annotations\AnnotationManager;
+
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
@@ -38,7 +40,14 @@ abstract class Service
 
     public function search(Request $request, Response $response, array $args): Response
     {
-        $criteria = new CriteriaBuilder($request->getQueryParams());
+        $manager = new AnnotationManager(EntityFactory::make($this->name));
+        $properties = $manager->getAllPropertiesWith(Query::class);
+
+        $query = $request->getQueryParams();
+        $query['sortables'] = array_keys(array_filter($properties, fn($property) => $property->sortable));
+        $query['searchables'] = array_keys(array_filter($properties, fn($property) => $property->searchable));
+
+        $criteria = new CriteriaBuilder($query);
         $entities = RepositoryFactory::make($this->name)->matching($criteria->build());
         return $this->toJson($response, ['data' => $entities->payload(), 'total' => $entities->count()])->withStatus(200);
     }

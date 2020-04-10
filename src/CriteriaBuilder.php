@@ -34,9 +34,11 @@ class CriteriaBuilder
         $criteria->where(Criteria::expr()->eq('excluded', false));
         
         if ($this->search) {
+            $contains = [];
             foreach ($this->searchables as $searchable) {
-                $criteria->andWhere(Criteria::expr()->contains($searchable, $this->search));
+                $contains[] = Criteria::expr()->contains($searchable, $this->search);
             }
+            $criteria->andWhere(Criteria::expr()->orX(...$contains));
         }
         
         if (is_bool($this->active)) {
