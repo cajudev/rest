@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Annotations\AnnotationReader;
 
-use Rest\Annotation\Payload;
+use \Cajudev\Rest\Annotation\Payload;
 
 /**
  * @ORM\MappedSuperclass
