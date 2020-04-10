@@ -1,24 +1,21 @@
-# Restful API
+# Rest
 
-[![](https://img.shields.io/packagist/v/cajudev/restful-api.svg)](https://packagist.org/packages/cajudev/restful-api)
-[![](https://img.shields.io/packagist/dt/cajudev/restful-api.svg)](https://packagist.org/packages/cajudev/restful-api)
-[![](https://img.shields.io/github/license/cajudev/restful-api.svg)](https://raw.githubusercontent.com/cajudev/restful-api/master/LICENSE)
-[![](https://img.shields.io/travis/cajudev/restful-api.svg)](https://travis-ci.org/cajudev/restful-api)
-[![](https://coveralls.io/repos/github/cajudev/restful-api/badge.svg?branch=PHP7.3)](https://coveralls.io/github/cajudev/restful-api)
-[![](https://img.shields.io/github/issues/cajudev/restful-api.svg)](https://github.com/cajudev/restful-api/issues)
-[![](https://img.shields.io/github/contributors/cajudev/restful-api.svg)](https://github.com/cajudev/restful-api/graphs/contributors)
+[![](https://img.shields.io/packagist/v/cajudev/rest.svg)](https://packagist.org/packages/cajudev/rest)
+[![](https://img.shields.io/packagist/dt/cajudev/rest.svg)](https://packagist.org/packages/cajudev/rest)
+[![](https://img.shields.io/github/license/cajudev/rest.svg)](https://raw.githubusercontent.com/cajudev/rest/master/LICENSE)
+[![](https://img.shields.io/travis/cajudev/rest.svg)](https://travis-ci.org/cajudev/rest)
+[![](https://coveralls.io/repos/github/cajudev/rest/badge.svg?branch=PHP7.3)](https://coveralls.io/github/cajudev/rest)
+[![](https://img.shields.io/github/issues/cajudev/rest.svg)](https://github.com/cajudev/rest/issues)
+[![](https://img.shields.io/github/contributors/cajudev/rest.svg)](https://github.com/cajudev/rest/graphs/contributors)
 
-Criando Restful APIs em um piscar de olhos
+A wrapper around slim framework that makes easy build API's
 
-Leia a documentação completa em: https://cajudev.readthedocs.io/projects/restful-api/pt/v1/
+## Features
 
-## Características
+- Follow PSR-1, PSR-2 e PSR-4 recommendations
+- High coverage of unit tests
+- Data persistence with Doctrine
 
-- Segue os padrões PSR-1, PSR-2 e PSR-4
-- Testes unitários com PHPUnit
-- Gerenciamento de requisições com Slim
-- Persistência de dados com Doctrine
+## Installation
 
-## Instalação
-
-`composer require cajudev/restful-api "^0"`
+`composer require cajudev/rest "^0"`
