@@ -1,14 +1,14 @@
 {
-  "name": "cajudev/restful-api",
+  "name": "cajudev/rest",
   "description": "Creating Restful APIs in the blink of an eye",
   "keywords": [
+    "rest",
     "restful",
     "api",
-    "rest",
     "php"
   ],
   "license": "MIT",
-  "homepage": "https://github.com/cajudev/restful-api",
+  "homepage": "https://github.com/cajudev/rest",
   "type": "library",
   "authors": [
     {
