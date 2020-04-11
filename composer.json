@@ -1,6 +1,6 @@
 {
   "name": "cajudev/rest",
-  "description": "Creating Restful APIs in the blink of an eye",
+  "description": "A wrapper around slim framework that makes easy build API's",
   "keywords": [
     "rest",
     "restful",
