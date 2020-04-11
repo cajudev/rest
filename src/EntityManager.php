@@ -27,10 +27,16 @@ class EntityManager
                 $useSimpleAnnotationReader = false
             );
 
-            $namingStrategy = new \Doctrine\ORM\Mapping\UnderscoreNamingStrategy(CASE_LOWER, true);
-            $config->setNamingStrategy($namingStrategy);
+            $config->setNamingStrategy(new \Doctrine\ORM\Mapping\UnderscoreNamingStrategy(CASE_LOWER, true));
+            
+            $em = \Doctrine\ORM\EntityManager::create($conn, $config);
 
-            self::$instance = \Doctrine\ORM\EntityManager::create($conn, $config);
+            if (!$em->getConnection()->getSchemaManager()->listTables()) {
+                $tool = new \Doctrine\ORM\Tools\SchemaTool($em);
+                $tool->createSchema($em->getMetadataFactory()->getAllMetadata());
+            }
+
+            self::$instance = $em;
         }
         return self::$instance;
     }
