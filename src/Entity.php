@@ -111,38 +111,44 @@ abstract class Entity
 
     private function addPayloadByAnnotationUsingEntity(Payload $annotation, Entity $entity) {
         if ($annotation->property) {
-            return $entity->{$annotation->property};
+            return $this->addPayloadByProperties($annotation, [$annotation->property], $entity);
         }
 
         if ($annotation->properties) {
-            
-            $parse = function($properties, $entity) use(&$parse, $annotation) {
-                $return = new \StdClass();
-
-                foreach ($properties as $key => $property) {
-                    if (property_exists($entity, $key) && $entity->$key instanceof Entity) {
-                        $return->$key = new \StdClass();
-                        $return->$key = $parse($property, $entity->$key);
-                    } elseif ($entity->$property instanceof $entity) {    
-                        $return->$property = $this->addPayloadByAnnotationUsingEntity($annotation, $entity->$property);
-                    } elseif ($entity->$property instanceof Entity) {
-                        $return->$property = $entity->$property->payload();
-                    } else {
-                        $return->$property = $entity->$property;
-                    }
-                }
-
-                if (count($properties) === 1) {
-                    $return = current($return);
-                }
-
-                return $return;
-            };
-
-            return $parse($annotation->properties, $entity);
+            return $this->addPayloadByProperties($annotation, $annotation->properties, $entity);
         }
 
         return $entity->payload();
+    }
+
+    private function addPayloadByProperties($annotation, $properties, $entity) {
+        $return = new \StdClass();
+
+        foreach ($properties as $key => $property) {
+            $this->addPayloadByProperty($return, $annotation, $key, $property, $entity);
+        }
+
+        if (count($properties) === 1) {
+            $return = current($return);
+        }
+
+        return $return;
+    }
+
+    private function addPayloadByProperty($return, $annotation, $key, $property, $entity) {
+        if (property_exists($entity, $key) && $entity->$key instanceof Entity) {
+            return $return->$key = $this->addPayloadByProperties($annotation, $property, $entity->$key);
+        }
+        
+        if ($entity->$property instanceof $entity) {    
+            return $return->$property = $this->addPayloadByAnnotationUsingEntity($annotation, $entity->$property);
+        }
+        
+        if ($entity->$property instanceof Entity) {
+            return $return->$property = $entity->$property->payload();
+        }
+
+        $return->$property = $entity->$property;
     }
 
     private function addPayloadByAnnotationUsingCollection(Payload $annotation, Collection $entities) {
