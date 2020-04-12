@@ -2,6 +2,6 @@
 
 namespace Cajudev\Rest\Exceptions;
 
-class MissingConfigurationException extends \Exception
+class MissingConfigurationException extends AppException
 {
 }

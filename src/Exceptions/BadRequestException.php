@@ -4,8 +4,8 @@ namespace Cajudev\Rest\Exceptions;
 
 class BadRequestException extends HttpException
 {
-    public function __construct(string $message)
+    public function __construct(string $message, string $hint = '')
     {
-        parent::__construct($message, 400);
+        parent::__construct($message, $hint, 400);
     }
 }
