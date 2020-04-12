@@ -4,10 +4,13 @@ namespace Cajudev\Rest;
 
 use Doctrine\Common\Annotations\AnnotationReader;
 
+use Cajudev\Rest\Factories\RepositoryFactory;
+
+use Cajudev\Rest\Annotations\Validations\AnnotationValidator;
+
 use Cajudev\Rest\Exceptions\NotFoundException;
 use Cajudev\Rest\Exceptions\BadRequestException;
 use Cajudev\Rest\Exceptions\UnprocessableEntityException;
-use Cajudev\Rest\Annotations\Validations\AnnotationValidator;
 
 abstract class Validator
 {
@@ -26,7 +29,6 @@ abstract class Validator
      */
     public function __construct($properties)
     {
-        $this->em           = EntityManager::getInstance();
         $this->reflection   = new \ReflectionClass($this);
         $this->annotation   = new AnnotationReader();
         $this->annotations  = $this->getAnnotations();
@@ -262,7 +264,8 @@ abstract class Validator
 
     public function validateId()
     {
-        if (!$this->getRepository()->find($this->id)) {
+        $repository = RepositoryFactory::make($this->reflection->getShortName());
+        if (!$repository->find($this->id)) {
             throw new NotFoundException("Recurso não encontrado", "Verifique se o identificador informado é válido, ou se o recurso já foi excluído.");
         }
     }
@@ -283,27 +286,5 @@ abstract class Validator
             }
         }
         return $payload;
-    }
-
-    public function getEntity(string $name, array $params = [])
-    {
-        $class = str_replace('Validator', 'Entity', static::class);
-        $class = preg_replace('/(\\\\)([^\\\\]+)$/', "$1{$name}", $class);
-        return new $class($params);
-    }
-
-    public function getValidator(string $name, array $params = [])
-    {
-        $class = preg_replace('/(\\\\)([^\\\\]+)$/', "$1{$name}", static::class);
-        return new $class($params);
-    }
-
-    public function getRepository(string $name = null)
-    {
-        $class = str_replace('Validator', 'Entity', static::class);
-        if ($name) {
-            $class = preg_replace('/(\\\\)([^\\\\]+)$/', "$1{$name}", $class);
-        }
-        return $this->em->getRepository($class);
     }
 }
