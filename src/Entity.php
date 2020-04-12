@@ -110,6 +110,10 @@ abstract class Entity
             return $this->addPayloadByAnnotationUsingCollection($annotation, $property->getValue($this));
         }
 
+        if ($property->getValue($this) instanceof \DateTime) {
+            return $this->addPayloadByAnnotationUsingDateTime($annotation, $property->getValue($this));
+        }
+
         return $property->getValue($this);
     }
 
@@ -183,6 +187,14 @@ abstract class Entity
         }
 
         return $return;
+    }
+
+    /**
+     * @param Payload $annotation
+     * @param \DateTime $datetime
+     */
+    private function addPayloadByAnnotationUsingDatetime(Payload $annotation, \DateTime $datetime) {
+        return $datetime->format($annotation->format);
     }
 
     public function __get($property)

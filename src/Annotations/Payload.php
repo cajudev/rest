@@ -17,4 +17,9 @@ final class Payload
      * @var array
      */
     public $properties;
+
+     /**
+     * @var string
+     */
+    public $format;
 }
