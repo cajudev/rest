@@ -95,6 +95,10 @@ abstract class Entity
         return $payload;
     }
 
+    /**
+     * @param Payload $annotation
+     * @param \ReflectionProperty $property
+     */
     private function addPayloadByAnnotation(Payload $annotation, \ReflectionProperty $property) {
         $property->setAccessible(true);
 
@@ -109,6 +113,10 @@ abstract class Entity
         return $property->getValue($this);
     }
 
+    /**
+     * @param Payload $annotation
+     * @param Entity $entity
+     */
     private function addPayloadByAnnotationUsingEntity(Payload $annotation, Entity $entity) {
         if ($annotation->property) {
             return $this->addPayloadByProperties($annotation, [$annotation->property], $entity);
@@ -121,7 +129,12 @@ abstract class Entity
         return $entity->payload();
     }
 
-    private function addPayloadByProperties($annotation, $properties, $entity) {
+    /**
+     * @param Payload $annotation
+     * @param array $properties
+     * @param Entity $entity
+     */
+    private function addPayloadByProperties(Payload $annotation, array $properties, Entity $entity) {
         $return = new \StdClass();
 
         foreach ($properties as $key => $property) {
@@ -135,7 +148,14 @@ abstract class Entity
         return $return;
     }
 
-    private function addPayloadByProperty($return, $annotation, $key, $property, $entity) {
+    /**
+     * @param object $return
+     * @param Payload $annotation
+     * @param string $key
+     * @param mixed $property
+     * @param Entity $entity
+     */
+    private function addPayloadByProperty(object $return, Payload $annotation, string $key, $property, Entity $entity) {
         if (property_exists($entity, $key) && $entity->$key instanceof Entity) {
             return $return->$key = $this->addPayloadByProperties($annotation, $property, $entity->$key);
         }
@@ -151,6 +171,10 @@ abstract class Entity
         $return->$property = $entity->$property;
     }
 
+    /**
+     * @param Payload $annotation
+     * @param Collection $entities
+     */
     private function addPayloadByAnnotationUsingCollection(Payload $annotation, Collection $entities) {
         $return = [];
 
