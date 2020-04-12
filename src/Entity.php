@@ -126,7 +126,7 @@ abstract class Entity
                     } elseif ($entity->$property instanceof $entity) {    
                         $return->$property = $this->addPayloadByAnnotationUsingEntity($annotation, $entity->$property);
                     } elseif ($entity->$property instanceof Entity) {
-                        $return->$property = $return->$property->payload();
+                        $return->$property = $entity->$property->payload();
                     } else {
                         $return->$property = $entity->$property;
                     }
