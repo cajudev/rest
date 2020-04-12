@@ -32,18 +32,13 @@ final class Entity extends AbstractAnnotationValidator
      */
     public $exclusive = false;
 
-    public function __construct(array $params) {
-        $this->owner = strtolower($params['owner']);
-        $this->target = strtolower($params['target']);
-        $this->field = $params['field'] ?? null;
-        $this->exclusive = $params['exclusive'] ?? false;
-    }
-
     public function validate($property, $value, $owner) {
         $repository = RepositoryFactory::make($this->target);
 
+        $exclusive = $this->exclusive ? [$this->owner => $owner]  : [];
+
         if (is_int($value)) {
-            if ($entity = $repository->find($value)) {
+            if ($entity = $repository->findOneBy(['id' => $value] + $exclusive)) {
                 return $entity;
             }
             throw new BadRequestException("Recurso {$this->target} [$value] não encontrado");
@@ -53,7 +48,7 @@ final class Entity extends AbstractAnnotationValidator
             $validator = ValidatorFactory::make($this->target, $value);
 
             if (isset($value->id)) {
-                if ($entity = $repository->find($value->id)) {
+                if ($entity = $repository->findOneBy(['id' => $value->id] + $exclusive)) {
                     $validator->validate(Validator::UPDATE);
                     $entity->populate($validator->payload());
                     return $entity;
@@ -67,12 +62,8 @@ final class Entity extends AbstractAnnotationValidator
 
         if (is_string($value) && $this->field) {
             $params = [$this->field => $value];
-
-            if ($this->exclusive) {
-                $search[strtolower($this->owner)] = $owner;
-            }
     
-            if ($entity = $repository->findOneBy($params)) {
+            if ($entity = $repository->findOneBy($params + $exclusive)) {
                 return $entity;
             }
 
@@ -82,6 +73,6 @@ final class Entity extends AbstractAnnotationValidator
             return EntityFactory::make($this->target, $validator->payload());
         }
 
-        throw new BadRequestException("Parâmetro {$this->target} inválido");
+        throw new BadRequestException("Parâmetro [$property] inválido");
     }
 }
