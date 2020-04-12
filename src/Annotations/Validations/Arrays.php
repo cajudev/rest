@@ -31,7 +31,7 @@ final class Arrays extends AbstractAnnotationValidator
      */
     public $maxlength;
 
-    public function validate($property, $array) {
+    public function validate(string $property, $array, int $owner) {
         if (!is_array($array)) {
             throw new BadRequestException("Parâmetro [$property] inválido.");
         }

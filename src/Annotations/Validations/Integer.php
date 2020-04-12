@@ -21,7 +21,7 @@ final class Integer extends AbstractAnnotationValidator
      */
     public $min;
 
-    public function validate($property, $integer) {
+    public function validate(string $property, $integer, int $owner) {
         if (!is_int($integer)) {
             throw new BadRequestException("Parâmetro [$property] inválido");
         }

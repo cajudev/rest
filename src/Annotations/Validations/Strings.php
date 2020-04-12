@@ -26,7 +26,7 @@ final class Strings extends AbstractAnnotationValidator
      */
     public $minlength;
 
-    public function validate($property, $string) {
+    public function validate(string $property, $string, int $owner) {
         if (!is_string($string)) {
             throw new BadRequestException("Parâmetro [$property] inválido");
         }

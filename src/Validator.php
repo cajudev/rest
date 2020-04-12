@@ -255,14 +255,14 @@ abstract class Validator
     {
         $annotation = $this->annotation->getPropertyAnnotation($property, AnnotationValidator::class);
         if ($annotation) {
-            $newValue = $annotation->validate($property->getName(), $property->getValue($this));
+            $newValue = $annotation->validate($property->getName(), $property->getValue($this), $this->id);
             $property->setValue($this, $newValue);
         }
     }
 
     public function validateId()
     {
-        if (!$this->getRepository()->findOneBy(['id' => $this->id, 'excluded' => false])) {
+        if (!$this->getRepository()->find($this->id)) {
             throw new NotFoundException("Recurso não encontrado");
         }
     }

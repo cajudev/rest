@@ -16,7 +16,7 @@ final class Enum extends AbstractAnnotationValidator
      */
     public $values;
 
-    public function validate($property, $element) {
+    public function validate(string $property, $element, int $owner) {
         if (!is_int($element) && !is_string($element)) {
             throw new BadRequestException("Parâmetro [$property] inválido");
         }

@@ -9,6 +9,11 @@ use Cajudev\Rest\Exceptions\BadRequestException;
 abstract class AbstractAnnotationValidator implements AnnotationValidator
 {
     /**
+     * @var int
+     */
+    public $owner = null;
+
+    /**
      * @var bool
      */
     public $required;
