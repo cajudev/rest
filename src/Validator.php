@@ -30,13 +30,21 @@ abstract class Validator
         $this->reflection   = new \ReflectionClass($this);
         $this->annotation   = new AnnotationReader();
         $this->annotations  = $this->getAnnotations();
+        $this->setProperties($properties);
+    }
+
+    /**
+     *
+     * @param array|object $properties
+     */
+    private function setProperties($properties)
+    {
         foreach ($properties as $property => $value) {
             $this->setProperty($property, $value);
         }
     }
 
     /**
-     * setProperty
      *
      * @param string $property
      * @param mixed  $value
@@ -59,8 +67,6 @@ abstract class Validator
     }
 
     /**
-     * getProperties
-     *
      * Retorna todas as propriedades públicas da classe
      *
      * @return array
@@ -73,8 +79,6 @@ abstract class Validator
     }
 
     /**
-     * getAnnotations
-     *
      * Retorna todas as anotações de propriedades dos atributos da classe
      *
      * @return array
@@ -89,8 +93,6 @@ abstract class Validator
     }
 
     /**
-     * addOptional
-     *
      * Configura as propriedades recebidas como opcionais
      *
      * @param string $optionals
@@ -108,8 +110,6 @@ abstract class Validator
     }
         
     /**
-     * addRequired
-     *
      * Configura as propriedades recebidas como obrigatórias
      *
      * @return void
@@ -125,8 +125,6 @@ abstract class Validator
     }
 
     /**
-     * validate
-     *
      * Realiza a validação de parâmetros em casos de inserção de dados
      *
      * @return void
@@ -142,13 +140,11 @@ abstract class Validator
     }
 
     /**
-     * validateInsert
-     *
      * Realiza a validação de parâmetros em casos de inserção de dados
      *
      * @return void
      */
-    protected function validateInsert()
+    private function validateInsert()
     {
         foreach ($this->getProperties(['id']) as $property) {
             $annotation = $this->annotations[$property->getName()] ?? null;
@@ -158,13 +154,11 @@ abstract class Validator
     }
 
     /**
-     * validateUpdate
-     *
      * Realiza a validação de parâmetros em casos de atualização de dados
      *
      * @return void
      */
-    protected function validateUpdate()
+    private function validateUpdate()
     {
         foreach ($this->getProperties() as $property) {
             $property->getName() === 'id' ? $this->validateRequired($property) : $this->validateOptional($property);
@@ -172,33 +166,27 @@ abstract class Validator
     }
 
     /**
-     * validateDelete
-     *
      * Realiza a validação de parâmetros em casos de remoção de dados
      *
      * @return void
      */
-    protected function validateDelete()
+    private function validateDelete()
     {
         $this->validateId();
     }
 
     /**
-     * validateRead
-     *
      * Realiza a validação de parâmetros em casos de consulta ao banco
      *
      * @return void
      */
-    protected function validateRead()
+    private function validateRead()
     {
         $this->validateId();
     }
 
 
     /**
-     * validateOptional
-     *
      * Realiza a validação de parâmetros apenas se os mesmos forem enviados
      *
      * @param ReflectionProperty $property
@@ -213,8 +201,6 @@ abstract class Validator
     }
 
     /**
-     * validateRequired
-     *
      * Realiza a validação de parâmetros tratando-os como obrigatórios
      *
      * @param ReflectionProperty $property
@@ -231,8 +217,6 @@ abstract class Validator
 
 
     /**
-     * validateProperty
-     *
      * Realiza a validação de de uma propriedade através de métodos de validação e annotations
      *
      * @param ReflectionProperty $property
@@ -245,9 +229,7 @@ abstract class Validator
         $this->validatePropertyWithValidateMethod($property);
     }
 
-    /**
-    * validatePropertyWithValidateMethod
-    *
+   /**
     * Executa o método de validação correspondente, caso o mesmo exista.
     *
     * @param ReflectionProperty $property
@@ -263,8 +245,6 @@ abstract class Validator
     }
 
     /**
-     * validatePropertyWithValidateMethod
-     *
      * Executa o método de validação da annotation correspondente, caso a mesma exista.
      *
      * @param ReflectionProperty $property
@@ -288,11 +268,9 @@ abstract class Validator
     }
 
     /**
-     * payload
+     * Retorna todos os atributos da classe
      *
-     * Retorna os atributos da classe em formato de array
-     *
-     * @return array
+     * @return object
      */
     public function payload(): object
     {
