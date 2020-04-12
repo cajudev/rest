@@ -263,7 +263,7 @@ abstract class Validator
     public function validateId()
     {
         if (!$this->getRepository()->find($this->id)) {
-            throw new NotFoundException("Recurso não encontrado");
+            throw new NotFoundException("Recurso não encontrado", "Verifique se o identificador informado é válido, ou se o recurso já foi excluído.");
         }
     }
 

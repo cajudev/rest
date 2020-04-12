@@ -2,6 +2,10 @@
 
 namespace Cajudev\Rest;
 
+use Cajudev\Rest\Responses\Ok;
+use Cajudev\Rest\Responses\Created;
+use Cajudev\Rest\Responses\NoContent;
+
 use Cajudev\Rest\CriteriaBuilder;
 use Cajudev\Rest\Annotations\Query;
 use Cajudev\Rest\Factories\EntityFactory;
@@ -29,13 +33,13 @@ abstract class Service
         $validator->validate(Validator::READ);
 
         $entity = RepositoryFactory::make($this->name)->find($args['id']);
-        return $this->toJson($response, $entity->payload())->withStatus(200);
+        return new Ok($response, $entity->payload());
     }
 
     public function all(Request $request, Response $response, array $args): Response
     {
         $entities = RepositoryFactory::make($this->name)->findAll();
-        return $this->toJson($response, ['data' => $entities->payload(), 'total' => $entities->count()])->withStatus(200);
+        return new Ok($response, ['data' => $entities->payload(), 'total' => $entities->count()]);
     }
 
     public function search(Request $request, Response $response, array $args): Response
@@ -54,7 +58,7 @@ abstract class Service
         $counter = $repository->matching($counter);
         $entities = $repository->matching($criteria);
         
-        return $this->toJson($response, ['data' => $entities->payload(), 'total' => $counter->count()])->withStatus(200);
+        return new Ok($response, ['data' => $entities->payload(), 'total' => $counter->count()]);
     }
 
     public function insert(Request $request, Response $response, array $args): Response
@@ -69,7 +73,7 @@ abstract class Service
         $this->em->persist($entity);
         $this->em->flush();
 
-        return $this->toJson($response, $entity->payload())->withStatus(201);
+        return new Created($response, $entity->payload());
         ;
     }
 
@@ -87,7 +91,7 @@ abstract class Service
 
         $this->em->flush();
 
-        return $this->toJson($response, $entity->payload())->withStatus(200);
+        return new Ok($response, $entity->payload());
     }
 
     public function delete(Request $request, Response $response, array $args): Response
@@ -101,12 +105,6 @@ abstract class Service
 
         $this->em->flush();
 
-        return $response->withStatus(204);
-    }
-
-    public function toJson(Response $response, $content): Response
-    {
-        $response->getBody()->write(json_encode($content, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
-        return $response;
+        return new NoContent($response);
     }
 }

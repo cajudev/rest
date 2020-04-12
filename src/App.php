@@ -44,26 +44,11 @@ class App
 
     public function crud(string $endpoint, Service $service)
     {
-        $this->app->get("/{$endpoint}/{id:[0-9]+}", function (Request $request, Response $response, array $args) use ($service) {
-            $response = $service->get($request, $response, $args);
-            return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
-        });
-        $this->app->get("/{$endpoint}", function (Request $request, Response $response, array $args) use ($service) {
-            $response = $service->search($request, $response, $args);
-            return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
-        });
-        $this->app->post("/{$endpoint}", function (Request $request, Response $response, array $args) use ($service) {
-            $response = $service->insert($request, $response, $args);
-            return $response->withHeader('Content-Type', 'application/json')->withStatus(201);
-        });
-        $this->app->put("/{$endpoint}/{id:[0-9]+}", function (Request $request, Response $response, array $args) use ($service) {
-            $response = $service->update($request, $response, $args);
-            return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
-        });
-        $this->app->delete("/{$endpoint}/{id:[0-9]+}", function (Request $request, Response $response, array $args) use ($service) {
-            $response = $service->delete($request, $response, $args);
-            return $response->withHeader('Content-Type', 'application/json')->withStatus(204);
-        });
+        $this->app->get("/{$endpoint}/{id:[0-9]+}", [$service, 'get']);
+        $this->app->get("/{$endpoint}", [$service, 'search']);
+        $this->app->post("/{$endpoint}", [$service, 'insert']);
+        $this->app->put("/{$endpoint}/{id:[0-9]+}", [$service, 'update']);
+        $this->app->delete("/{$endpoint}/{id:[0-9]+}", [$service, 'delete']);
     }
 
     public function __call($method, $args)
@@ -79,7 +64,7 @@ class App
 
         $this->errorMiddleware->setDefaultErrorHandler(function ($request, $e) use ($app) {
             $response = $app->getResponseFactory()->createResponse();
-            $data = ['error' => $e->getMessage()];
+            $data = ['error' => $e->getMessage()] + (__DEV__ ? ['hint' => $e->getHint()] : []);
             $response->getBody()->write(json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
             return $response->withHeader('Content-Type', 'application/json')->withStatus($e->getCode());
         });
