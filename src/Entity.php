@@ -194,7 +194,9 @@ abstract class Entity
      * @param \DateTime $datetime
      */
     private function addPayloadByAnnotationUsingDatetime(Payload $annotation, \DateTime $datetime) {
-        return $datetime->format($annotation->format);
+        $formats = ["ATOM", "COOKIE", "ISO8601", "RFC822", "RFC850", "RFC1036", "RFC1123", "RFC2822", "RFC3339", "RSS", "W3C"];
+        $format = in_array($annotation->format, $formats) ? constant("\DateTime::{$annotation->format}") : $annotation->format;
+        return $datetime->format($format);
     }
 
     public function __get($property)
