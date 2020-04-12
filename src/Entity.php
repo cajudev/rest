@@ -132,6 +132,10 @@ abstract class Entity
                     }
                 }
 
+                if (count($properties) === 1) {
+                    $return = current($return);
+                }
+
                 return $return;
             };
 
