@@ -115,13 +115,27 @@ abstract class Entity
         }
 
         if ($annotation->properties) {
-            $return = new \StdClass();
+            
+            $parse = function($properties, $entity) use(&$parse, $annotation) {
+                $return = new \StdClass();
 
-            foreach ($annotation->properties as $property) {
-                $return->$property = $entity->$property;
-            }
+                foreach ($properties as $key => $property) {
+                    if (property_exists($entity, $key) && $entity->$key instanceof Entity) {
+                        $return->$key = new \StdClass();
+                        $return->$key = $parse($property, $entity->$key);
+                    } elseif ($entity->$property instanceof $entity) {    
+                        $return->$property = $this->addPayloadByAnnotationUsingEntity($annotation, $entity->$property);
+                    } elseif ($entity->$property instanceof Entity) {
+                        $return->$property = $return->$property->payload();
+                    } else {
+                        $return->$property = $entity->$property;
+                    }
+                }
 
-            return $return;
+                return $return;
+            };
+
+            return $parse($annotation->properties, $entity);
         }
 
         return $entity->payload();
