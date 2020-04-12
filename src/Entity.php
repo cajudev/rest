@@ -206,7 +206,7 @@ abstract class Entity
         $value = $ref->getValue($this);
 
         if ($value instanceof Collection) {
-            return new CollectionProxy($this, strtolower($property), $value);
+            return new CollectionProxy($this, $value);
         }
 
         return $value;

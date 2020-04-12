@@ -3,7 +3,7 @@
 use PHPUnit\Framework\TestCase;
 
 use Cajudev\Rest\Entity;
-use Cajudev\Rest\CollectionProxy;
+use Cajudev\Rest\Collections\CollectionProxy;
 
 use Doctrine\Common\Collections\ArrayCollection;
 
@@ -32,8 +32,8 @@ class CollectionProxyTest extends TestCase
 
     public function test_proxy_should_set_new_collection()
     {
-        $this->proxy->set(new ArrayCollection());
         $this->proxy->add(new Child());
+        $this->proxy->set(new ArrayCollection());
         $this->assertCount(0, $this->collection);
     }
 

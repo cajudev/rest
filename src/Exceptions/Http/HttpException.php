@@ -1,8 +1,8 @@
 <?php
 
-namespace Cajudev\Rest\Exceptions;
+namespace Cajudev\Rest\Exceptions\Http;
 
-abstract class AppException extends \Exception
+class HttpException extends \Exception
 {
     protected string $hint;
 

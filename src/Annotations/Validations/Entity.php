@@ -9,7 +9,7 @@ use Cajudev\Rest\EntityManager;
 use Cajudev\Rest\Factories\EntityFactory;
 use Cajudev\Rest\Factories\ValidatorFactory;
 use Cajudev\Rest\Factories\RepositoryFactory;
-use Cajudev\Rest\Exceptions\BadRequestException;
+use Cajudev\Rest\Exceptions\Http\BadRequestException;
 
 /**
  * @Annotation

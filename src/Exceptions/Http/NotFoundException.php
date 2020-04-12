@@ -1,6 +1,6 @@
 <?php
 
-namespace Cajudev\Rest\Exceptions;
+namespace Cajudev\Rest\Exceptions\Http;
 
 class NotFoundException extends HttpException
 {

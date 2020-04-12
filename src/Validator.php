@@ -8,9 +8,9 @@ use Cajudev\Rest\Factories\RepositoryFactory;
 
 use Cajudev\Rest\Annotations\Validations\AnnotationValidator;
 
-use Cajudev\Rest\Exceptions\NotFoundException;
-use Cajudev\Rest\Exceptions\BadRequestException;
-use Cajudev\Rest\Exceptions\UnprocessableEntityException;
+use Cajudev\Rest\Exceptions\Http\NotFoundException;
+use Cajudev\Rest\Exceptions\Http\BadRequestException;
+use Cajudev\Rest\Exceptions\Http\UnprocessableEntityException;
 
 abstract class Validator
 {

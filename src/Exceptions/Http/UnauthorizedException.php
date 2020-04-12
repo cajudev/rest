@@ -1,6 +1,6 @@
 <?php
 
-namespace Cajudev\Rest\Exceptions;
+namespace Cajudev\Rest\Exceptions\Http;
 
 class ForbiddenException extends HttpException
 {

@@ -17,10 +17,17 @@ class Test extends TestCase
         $this->expectException(MissingConfigurationException::class);
         App::create();
     }
+    
+    public function test_should_throws_when_root_constant_not_set()
+    {
+        $this->expectException(MissingConfigurationException::class);
+        App::create();
+    }
 
     public function test_should_create_router_instance()
     {
         define('__DEV__', true);
+        define('__ROOT__', true);
         $app = App::create();
         $this->assertInstanceOf(App::class, $app);
     }

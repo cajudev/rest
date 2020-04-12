@@ -3,7 +3,7 @@
 use PHPUnit\Framework\TestCase;
 
 use Cajudev\Rest\Entity;
-use Cajudev\Rest\CollectionProxy;
+use Cajudev\Rest\Collections\CollectionProxy;
 
 use Doctrine\Common\Collections\ArrayCollection;
 

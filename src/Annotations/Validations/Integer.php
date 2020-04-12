@@ -4,7 +4,7 @@ namespace Cajudev\Rest\Annotations\Validations;
 
 use Doctrine\Common\Annotations\Annotation;
 
-use Cajudev\Rest\Exceptions\BadRequestException;
+use Cajudev\Rest\Exceptions\Http\BadRequestException;
 
 /**
  * @Annotation
