@@ -19,7 +19,7 @@ use Cajudev\Rest\Collections\CollectionProxy;
 abstract class Entity
 {
     /**
-     * @Payload(context={"default", "options"})
+     * @Payload(context={"default", "list", "options"})
      * 
      * @Query(sortable=true)
      * 
@@ -28,7 +28,7 @@ abstract class Entity
     protected ?int $id = 0;
 
     /**
-     * @Payload(context={"default"})
+     * @Payload(context={"default", "list"})
      * 
      * @ORM\Column(type="boolean", nullable=false)
      */

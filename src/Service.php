@@ -45,7 +45,7 @@ abstract class Service
     public function list(Request $request, Response $response, array $args): Response
     {
         [$counter, $search] = $this->search($request, $response, $args);
-        return new Ok($response, ['data' => $search->payload(), 'total' => $counter->count()]);
+        return new Ok($response, ['data' => $search->payload('list'), 'total' => $counter->count()]);
     }
 
     public function insert(Request $request, Response $response, array $args): Response
