@@ -88,8 +88,9 @@ abstract class Entity
         $payload = new \StdClass();
 
         foreach ($this->getReflection()->getProperties() as $property) {
-            if ($annotation = $reader->getPropertyAnnotation($property, Payload::class)) {
-                if (in_array($context, $annotation->context)) {
+            $annotations = $reader->getPropertyAnnotations($property);
+            foreach ($annotations as $annotation) {
+                if ($annotation instanceof Payload && in_array($context, $annotation->context)) {
                     $payload->{$property->getName()} = $this->addPayloadByAnnotation($annotation, $property);
                 }
             }
