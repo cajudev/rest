@@ -7,7 +7,7 @@ class ValidatorFactory implements ClassFactory
     public static function make(string $name, $params = []): object
     {
         $class = static::namespace($name);
-        return EntityManager::getInstance()->getRepository($class);
+        return new $class($params);
     }
 
     public static function namespace(string $name): string {
