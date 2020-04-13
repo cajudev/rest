@@ -4,10 +4,13 @@ namespace Cajudev\Rest\Factories;
 
 class EntityFactory implements ClassFactory
 {
-    public static function make(string $entity, $params = [])
+    public static function make(string $name, $params = []): object
     {
-        $Entity = ucfirst($entity);
-        $class = "App\\Entity\\$Entity";
+        $class = static::namespace($name);
         return new $class($params);
+    }
+
+    public static function namespace(string $name): string {
+        return sprintf('App\Entity\%s', ucfirst($name));
     }
 }
