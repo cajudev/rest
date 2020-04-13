@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Annotations\AnnotationReader;
 
 use Cajudev\Rest\Annotations\Query;
+use Cajudev\Rest\Annotations\Option;
 use Cajudev\Rest\Annotations\Payload;
 use Cajudev\Rest\Collections\CollectionProxy;
 
@@ -18,7 +19,7 @@ use Cajudev\Rest\Collections\CollectionProxy;
 abstract class Entity
 {
     /**
-     * @Payload
+     * @Payload(context={"default", "options"})
      * 
      * @Query(sortable=true)
      * 
@@ -27,7 +28,7 @@ abstract class Entity
     protected ?int $id = 0;
 
     /**
-     * @Payload
+     * @Payload(context={"default"})
      * 
      * @ORM\Column(type="boolean", nullable=false)
      */
@@ -82,13 +83,15 @@ abstract class Entity
      *
      * @return object
      */
-    public function payload(): object {
+    public function payload(string $context = 'default'): object {
         $reader  = new AnnotationReader();
         $payload = new \StdClass();
 
         foreach ($this->getReflection()->getProperties() as $property) {
             if ($annotation = $reader->getPropertyAnnotation($property, Payload::class)) {
-                $payload->{$property->getName()} = $this->addPayloadByAnnotation($annotation, $property);
+                if (in_array($context, $annotation->context)) {
+                    $payload->{$property->getName()} = $this->addPayloadByAnnotation($annotation, $property);
+                }
             }
         }
         

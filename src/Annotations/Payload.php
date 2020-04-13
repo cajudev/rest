@@ -9,6 +9,11 @@ namespace Cajudev\Rest\Annotations;
 final class Payload
 {
     /**
+     * @var array
+     */
+    public $context;
+
+    /**
      * @var string
      */
     public $property;

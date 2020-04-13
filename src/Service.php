@@ -36,29 +36,16 @@ abstract class Service
         return new Ok($response, $entity->payload());
     }
 
-    public function all(Request $request, Response $response, array $args): Response
+    public function options(Request $request, Response $response, array $args): Response
     {
-        $entities = RepositoryFactory::make($this->name)->findAll();
-        return new Ok($response, ['data' => $entities->payload(), 'total' => $entities->count()]);
+        [$counter, $search] = $this->search($request, $response, $args);
+        return new Ok($response, ['data' => $search->payload('options'), 'total' => $counter->count()]);
     }
 
-    public function search(Request $request, Response $response, array $args): Response
+    public function list(Request $request, Response $response, array $args): Response
     {
-        $manager = new AnnotationManager(EntityFactory::make($this->name));
-        $properties = $manager->getAllPropertiesWith(Query::class);
-
-        $query = $request->getQueryParams();
-        $query['sortables'] = array_keys(array_filter($properties, fn($property) => $property->sortable));
-        $query['searchables'] = array_keys(array_filter($properties, fn($property) => $property->searchable));
-
-        $builder = new CriteriaBuilder($query);
-        [$counter, $criteria] = $builder->build();
-
-        $repository = RepositoryFactory::make($this->name);
-        $counter = $repository->matching($counter);
-        $entities = $repository->matching($criteria);
-        
-        return new Ok($response, ['data' => $entities->payload(), 'total' => $counter->count()]);
+        [$counter, $search] = $this->search($request, $response, $args);
+        return new Ok($response, ['data' => $search->payload(), 'total' => $counter->count()]);
     }
 
     public function insert(Request $request, Response $response, array $args): Response
@@ -106,5 +93,21 @@ abstract class Service
         $this->em->flush();
 
         return new NoContent($response);
+    }
+
+    private function search(Request $request, Response $response, array $args): array
+    {
+        $manager = new AnnotationManager(EntityFactory::make($this->name));
+        $properties = $manager->getAllPropertiesWith(Query::class);
+
+        $query = $request->getQueryParams();
+        $query['sortables'] = array_keys(array_filter($properties, fn($property) => $property->sortable));
+        $query['searchables'] = array_keys(array_filter($properties, fn($property) => $property->searchable));
+
+        $builder = new CriteriaBuilder($query);
+        [$counter, $criteria] = $builder->build();
+
+        $repository = RepositoryFactory::make($this->name);
+        return [$repository->matching($counter), $repository->matching($criteria)];
     }
 }
