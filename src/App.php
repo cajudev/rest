@@ -44,12 +44,12 @@ class App
 
     public function crud(string $endpoint, Service $service)
     {
-        $this->app->get("/{$endpoint}/{id:[0-9]+}", [$service, 'get']);
-        $this->app->get("/{$endpoint}", [$service, 'list']);
-        $this->app->get("/{$endpoint}/options", [$service, 'options']);
-        $this->app->post("/{$endpoint}", [$service, 'insert']);
-        $this->app->put("/{$endpoint}/{id:[0-9]+}", [$service, 'update']);
-        $this->app->delete("/{$endpoint}/{id:[0-9]+}", [$service, 'delete']);
+        $this->app->get("{$endpoint}/{id:[0-9]+}", [$service, 'get']);
+        $this->app->get("{$endpoint}", [$service, 'list']);
+        $this->app->get("{$endpoint}/options", [$service, 'options']);
+        $this->app->post("{$endpoint}", [$service, 'insert']);
+        $this->app->put("{$endpoint}/{id:[0-9]+}", [$service, 'update']);
+        $this->app->delete("{$endpoint}/{id:[0-9]+}", [$service, 'delete']);
     }
 
     public function __call($method, $args)
