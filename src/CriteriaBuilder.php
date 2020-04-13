@@ -4,6 +4,10 @@ namespace Cajudev\Rest;
 
 use Doctrine\Common\Collections\Criteria;
 
+use Cajudev\Rest\Utils\Setter;
+use Cajudev\Rest\Utils\Sanitizer;
+
+
 class CriteriaBuilder
 {
     private int $page = 1;
@@ -17,14 +21,8 @@ class CriteriaBuilder
 
     public function __construct($params)
     {
-        $this->page = $params['page'] ?? $this->page;
-        $this->limit = $params['limit'] ?? $this->limit;
-        $this->search = $params['search'] ?? $this->search;
-        $this->sort = $params['sort'] ?? $this->sort;
-        $this->order = $params['order'] ?? $this->order;
-        $this->active = $params['active'] ?? $this->active;
-        $this->searchables = $params['searchables'] ?? $this->searchables;
-        $this->sortables = $params['sortables'] ?? $this->sortables;
+        $setter = new Setter($this, $params);
+        $setter->set(Setter::MODE_SAFE);
     }
 
     public function build()
@@ -58,4 +56,13 @@ class CriteriaBuilder
 
         return [$counter, $criteria];
     }
+
+    public function setPage($page) { if ($page) ($this->page = $page); }
+    public function setLimit($limit) { if ($limit) ($this->limit = $limit); }
+    public function setSearch($search) { if ($search) ($this->search = $search); }
+    public function setSort($sort) { if ($sort) ($this->sort = $sort); }
+    public function setOrder($order) { if ($order) ($this->order = $order); }
+    public function setSearchables($searchables) { if ($searchables) ($this->searchables = $searchables); }
+    public function setSortables($sortables) { if ($sortables) ($this->sortables = $sortables); }
+    public function setActive($active) { if ($active) ($this->active = Sanitizer::boolean($active)); }
 }
