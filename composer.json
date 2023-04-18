@@ -27,7 +27,7 @@
   "require": {
     "php": "^7.4",
     "slim/slim": "4.4",
-    "slim/psr7": "1.0.0",
+    "slim/psr7": "1.6.1",
     "doctrine/orm": "2.7.2",
     "doctrine/migrations": "2.2.1"
   },
